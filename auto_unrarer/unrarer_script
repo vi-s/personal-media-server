@@ -17,15 +17,20 @@ A program for a robot to continually unrar new content and clean
 that content up by deleting it when the rest of the rared content
 has been deleted (probably through the Deluge Web UI).
 
-This manager can only be used on a Source Folder (sourcef) where
-torrents are moved to said folder AFTER they have completed downloading.
-If this condition isn't true, the dirty checking will be fucked up.
+A DFS of file system directories is initiated from the source folder 
+(sourcef). As this DFS is continuously executed via the crontab, we
+update status of our encountered files in the Memory Shelf (more info on 
+that below).
+
+This manager can only be used on a source folder where torrents are 
+moved to said folder AFTER they have completed downloading. If this 
+condition  isn't true, the dirty checking will be fucked up.
 
 The fp variable corresponds to file path throughout this program.
 '''
 
 '''
-Memory Shelf:
+Memory Shelf (using ConcurrentShelf.py):
 
 Store a memory of archive folders that we have previously
 visited. This 'memory' will be a file containing JSON output...

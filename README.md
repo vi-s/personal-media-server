@@ -12,8 +12,9 @@ Additionally, certain processes (such as video conversion status) are monitored 
 
 ### Media Server Components
 The complete personal media server system that this project references includes the following parts.
-* Apache Web Server for streaming access to server's media contents
+* Apache Web Server as the core media streaming server
 * Flask Web Server to retrieve information about media server / infrastructure node status
 * Deluge Daemon Bittorrent Client
 * Deluge Web UI Server
 * Btsync to sync torrent files between host and remote machines
+* VLC or a Web Browser (Chrome has best codec support) as the stream client
