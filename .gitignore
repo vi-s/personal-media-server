@@ -1,0 +1,8 @@
+webm_converter/webm_prog.db
+webm_converter/webm_prog.db.db
+webm_converter/nohup.out
+*.pyc
+nohup.out
+auto_unrarer/folder_mem.db
+auto_unrarer/folder_mem.db.db
+auto_unrarer/folder_mem.db.lck
