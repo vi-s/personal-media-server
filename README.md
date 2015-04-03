@@ -1,7 +1,7 @@
 # personal-media-server
 Automation/Monitoring scripts to make managing a remote personal media serve a breeze.
 
-This type of personal server can easily be achieved for 5 dollars a month on Digital Ocean.
+This type of personal server can easily be achieved for 5 dollars a month on Digital Ocean. This project was built on a CentOS 7 server, but can be tweaked to work with other distributions.
 
 ### Automation
 Processes that are typically carried out manually are automated through executable python scripts.
