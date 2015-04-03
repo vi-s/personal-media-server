@@ -1,0 +1,20 @@
+iptables -F # Flush out existing firewall rules
+
+# Blacklisting
+iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP # Drop null packets
+iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP # Reject SYN flood attack
+iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP # XMAS tree packet drop
+
+# Whitelisting
+iptables -A INPUT -i lo -j ACCEPT # Accept traffic from the localhost
+iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT # Accept HTTP
+iptables -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT # Accept HTTPS
+iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 8888 -j ACCEPT # Btsync Web UI
+iptables -A INPUT -p tcp -m tcp --dport 8112 -j ACCEPT # Deluge Web UI
+iptables -A INPUT -p tcp -m tcp --dport 1337 -j ACCEPT # Apache
+iptables -A INPUT -p tcp -m tcp --dport 5000 -j ACCEPT # Flask
+
+# Save and restart
+iptables-save | sudo tee /etc/sysconfig/iptables
+service iptables restart
