@@ -16,4 +16,4 @@ The complete personal media server system that this project references includes 
 * Deluge Daemon Bittorrent Client
 * Deluge Web UI Server
 * Btsync to sync torrent files between host and remote machines
-* Apache Web Server for access to media contents
+* Apache Web Server for streaming access to server's media contents
