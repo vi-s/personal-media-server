@@ -1,0 +1,181 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import subprocess
+import re
+import sys
+import os
+import shelve
+from datetime import datetime
+
+'''
+@author Vikram Somu
+@date 4/1/2015
+
+DEPENDENCIES: 'ffmpeg' unix command line tool
+
+INPUT ARGV
+SOURCEFP: Take as input a sourcefp to scan for video content
+Video content defined: .mp4, .m4v, .mkv, .avi, .flv
+QUALITY:'mid_gen' or 'hi_centos' (might add more later)
+
+This is a script to convert all video files in a certain directory
+to webm using ffmpeg. The progress gets saved to a python shelf on the 
+disk in real-time so that said progress can be manipulated however one 
+chooses. This is not a multi-threaded program because frankly there is no point...
+
+Used some good new Regex strategies in this script, such as NON-MATCHING GROUPS
+REGEX NON-MATCHING GROUPS
+The ?: in the beginning of the inner match group, makes it so that
+group is a non-matching group, meaning its matches wont be returned.
+It is solely used for grouping.
+re.match('(.*\.(?:mp4|m4v|mkv|avi|flv))$', 'haha.avi')
+'''
+
+
+class WebMConverter(object):
+
+    def __init__(self, shelfn, quality):
+        self.midqual_generic_cmd = "ffmpeg -y -i {inputfp} -vcodec libvpx -acodec libvorbis {outputfp}"
+        self.highqal_centos7_cmd = "ffmpeg -y -i {inputfp} -codec:v libvpx -quality good -cpu-used 0 -b:v 500k -qmin 10 -qmax 42 -maxrate 500k -bufsize 1000k -threads 4 -vf scale=-1:480 -codec:a libvorbis -b:a 128k {outputfp}"
+
+        # To extract time data from a string such as 
+        # 'frame=   13 fps=2.3 q=0.0 size=    8292kB time=00:00:00.69 bitrate=97313.6kbits/s'
+        # Extracted data: '00:00:00.69'
+        self.time_re = "time=((?:[0-9]{2}(?:\:|\.)*)+)"
+        # Extract '00:45:56.48' from 'Duration: 00:45:56.48, start: 0.000000, bitrate: 4484 kb/s'
+        self.duration_re = "Duration: ((?:[0-9]{2}(?:\:|\.)*)+)"
+        # Extract entire video name if one of the formats matches
+        self.video_re = "(.*\.(?:mp4|m4v|mkv|avi|flv))$"
+
+        self.translate_quality = {
+            'mid_gen': self.midqual_generic_cmd,
+            'hi_centos': self.highqal_centos7_cmd
+        }
+
+        self.quality = quality
+        self.shelvefnstr = shelfn
+
+    # Loop through files in sourcefp directory looking for video content
+    # for each found video, issue an ffmpeg shell command to convert to .webm
+    def scan_sourcefp(self, sourcefp):
+        # If sourcefp is not a dir, break flow of execution
+        if not os.path.isdir(sourcefp):
+            return
+
+        sourcefp = sourcefp.strip()
+        # If last char is a '/', exclude it
+        if sourcefp[-1] == '/':
+            sourcefp = sourcefp[:-1]
+
+        for file in os.listdir(sourcefp):
+            fp = sourcefp + '/' + file
+            if re.match(self.video_re, fp):
+                # Found a video file, commence child process execution / monitoring
+                self.ffmpeg_proc_exec(fp)
+
+
+    # Execute/Monitor a single ffmpeg subprocess to convert 1 video file.
+    # We track real-time progress of said conversion using process 
+    # communication through stdout and update said progress in a python shelf.
+    def ffmpeg_proc_exec(self, fp):
+        fp = fp.strip()
+        # Grab inpput file name
+        inf = fp.split('/')[-1] # Name of video file
+        # Escape the spaces
+        inf = inf.replace(' ', '\ ')
+        outf = '.'.join(inf.split('.')[:-1]) + '.webm' # Constructed output file name
+        parent_dir_fp = '/'.join(fp.split('/')[:-1]) # Parent dir of input/ouput files
+
+        # Assemble ffmpeg shell command
+        cmd_template = self.translate_quality[self.quality]
+        cmd = cmd_template.format(
+            inputfp=parent_dir_fp + '/' + inf, 
+            outputfp=parent_dir_fp + '/' + outf
+        )
+
+        # ffmpeg directs progress info to stderr
+        child = subprocess.Popen(cmd, shell=True, stderr=subprocess.PIPE)
+        
+        basedt = self.str_to_dtobj("00:00:00.00")
+        durationdt = None
+        duration_delta = None
+
+        duration_found = False
+        program_terminated = False
+
+        while not program_terminated:
+            # Lowering the buffer-size param to the read method makes the 
+            # data come back faster since a smaller buffer size must be filled up
+            # before read() can return. The most responsive is to have a buffer size 
+            # of only 1 by using child.stderr.read(1)
+            # ffmpeg happens to output progress to stderr, but this works same for stdout
+            out = child.stderr.read(1024)
+            if out == '' and child.poll() != None:
+                program_terminated = True
+            if out != '':
+                if not duration_found:
+                    durationg = re.search(self.duration_re, out) # duration groups
+
+                    if durationg:
+                        durationstr = durationg.groups()[0]
+                        self.set_shelve_val(inf, 'duration', durationstr)
+                        durationdt = self.str_to_dtobj(durationstr)
+                        duration_delta = durationdt - basedt
+                        duration_found = True
+
+                timeg = re.search(self.time_re, out) # time groups
+                if timeg:
+                    timecompstr = timeg.groups()[0]
+                    self.set_shelve_val(inf, 'time_complete', timecompstr)
+
+                    timecompdt = self.str_to_dtobj(timecompstr)
+                    timecomp_delta = timecompdt - basedt
+                    progress_ratio = timecomp_delta.total_seconds() / duration_delta.total_seconds()
+                    progress_pct = progress_ratio * 100
+                    self.set_shelve_val(inf, "% progress", progress_pct)
+
+                # To send stdout of child on to console that executed python:
+                # sys.stdout.write(out)
+                # sys.stdout.flush()
+
+    '''
+    k is the key, the movie file title 
+    vstr is the attribute to set the value dictionary, a nested dict
+        i.e. shelf[k] -> value dictionary
+    And v is the value to set for the key 'vstr' in the nested dict
+
+    This method opens and closes the shelf within it so that the update
+    gets synced to the file system. (For some reason Shelf.sync wouldn't work for me)
+    '''
+    def set_shelve_val(self, k, vstr, v):
+        shelvef = shelve.open(self.shelvefnstr, flag='c')
+
+        if shelvef.dict.has_key(k):
+            curv = shelvef[k]
+        else:
+            curv = {}
+
+        curv[vstr] = v
+        shelvef[k] = curv
+
+        shelvef.close()
+
+    def str_to_dtobj(self, timestr):
+        return datetime.strptime(timestr, "%H:%M:%S.%f")
+
+
+def main():
+    shelf_name = "webm_prog.db"
+    QUALITY = sys.argv[1].strip() # 'hi_centos' or 'mid_gen'
+    SOURCEFP = sys.argv[2].strip() # The sourcefp to scan
+
+    w = WebMConverter(shelf_name, QUALITY)
+    w.scan_sourcefp(SOURCEFP)
+
+main()
+
+
+
+
+

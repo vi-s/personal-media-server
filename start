@@ -1,0 +1,68 @@
+export HTTP_PORT=8080
+export HTTPS_PORT=8000
+export HTTPS_ENABLED=false #Don't forget to turn off HTTPS url redirect in NameCheap
+export BUILD_ENVIRONMENT=production
+export HOST_PROVIDER=digitalocean #either digitalocean or amazon
+export BTSYNCF=/root/btsyncf #Btsync folder
+export FOLDER_MEMDB_FP=/root/folder_mem.db
+export WEBM_PROG_FP=/root/gt-course-watch/torrent_webm_converter/webm_prog.db
+
+# port remapping solution involving changing the routing table
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to $HTTP_PORT
+
+if [ $HTTPS_ENABLED == 'true' ]; then
+  sudo iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to $HTTPS_PORT
+fi
+
+# Start the firewall
+chmod +x firewall
+./firewall
+
+# Allocate 2GB Swap Space
+# TO UNMOUNT THE SWAP SPACE, simply issue: 'swapoff -a'
+sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=2048
+sudo /sbin/mkswap /var/swap.1
+sudo /sbin/swapon /var/swap.1
+
+sudo mkdir -p /data/db
+sudo mkdir -p /log
+sudo touch /log/mongod.log
+
+# old change permissions command:
+# sudo chown $(whoami) /data/db # $() forks the script, runs the contents, and returns the output
+sudo chown `id -u` /data/db # $() forks the script, runs the contents, and returns the output
+sudo cp mongod.conf /etc/mongod.conf
+sudo mongod --config /etc/mongod.conf --smallfiles
+
+# Install Apache
+sudo yum -y install httpd
+# Overwrite system httpd.conf with project httpd.conf
+# Restart the httpd service
+sudo cp httpd.conf /etc/httpd/conf/httpd.conf
+service httpd restart
+
+# Start Btsync
+$BTSYNCF/btsync --webui.listen 0.0.0.0:8888
+
+# Start deluge
+./deluge_run
+
+# Install EPEL
+rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+# Install pip through yum / EPEL
+sudo yum -y install python-pip
+# Install flask through pip
+sudo pip install flask
+# Start Flask Dev Server
+# nohup ensures that the process doesnt exit even when the parent process terminates.
+# the & at the end of the command makes the command execute in the background,
+# and therefore allows you to regain access to the command line
+nohup python ./flask_server/app.py &
+
+./node_modules/forever/bin/forever \
+start \
+-al forever.log \
+-ao out.log \
+-ae err.log \
+app.js
+

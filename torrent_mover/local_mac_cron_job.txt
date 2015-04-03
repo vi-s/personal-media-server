@@ -1,0 +1,17 @@
+# To open up the local crontab use this cmd:
+env EDITOR=vim crontab -e
+
+# In order to get our system to run the python script every 
+# 10 seconds, we are going to have to use a kludge:
+# http://stackoverflow.com/questions/9619362/running-a-cron-every-30-seconds
+
+# '* * * * * exec' syntax makes a exec run every 1 minute
+
+# The syntax for the job is below:
+
+* * * * * /Users/vikram/gtcw/torrent_mover/mover_script /Users/vikram/Downloads /Users/vikram/Downloads/tor_transfer
+* * * * * ( sleep 10 ; /Users/vikram/gtcw/torrent_mover/mover_script /Users/vikram/Downloads /Users/vikram/Downloads/tor_transfer)
+* * * * * ( sleep 20 ; /Users/vikram/gtcw/torrent_mover/mover_script /Users/vikram/Downloads /Users/vikram/Downloads/tor_transfer)
+* * * * * ( sleep 30 ; /Users/vikram/gtcw/torrent_mover/mover_script /Users/vikram/Downloads /Users/vikram/Downloads/tor_transfer)
+* * * * * ( sleep 40 ; /Users/vikram/gtcw/torrent_mover/mover_script /Users/vikram/Downloads /Users/vikram/Downloads/tor_transfer)
+* * * * * ( sleep 50 ; /Users/vikram/gtcw/torrent_mover/mover_script /Users/vikram/Downloads /Users/vikram/Downloads/tor_transfer)

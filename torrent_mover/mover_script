@@ -1,0 +1,39 @@
+#! /usr/bin/env python
+
+import sys
+import os
+
+# This is a program for a robot that scans a Downloads directory
+# for torrent files, and subsequently moves them to a torrent sync folder
+
+# INPUTS
+# Arg 1: Scan directory, in our case Download dir
+# Arg 2: Destination (sync) directory to move file to
+# print sys.argv
+
+# Scan the download directory for all torrent files
+# return found torrent files
+def scan_for_torrents(folder):
+    ret = []
+
+    for file in os.listdir(folder):
+        if file.endswith(".torrent"):
+            ret.append(file)
+
+    return ret
+
+# Move a found file from scanned folder to 
+# destination folder
+def move_file(scanf, destf, file):
+    os.rename(scanf + '/' + file, destf + '/' + file)
+
+# Main func to run program
+def main():
+    SCANF = sys.argv[1].strip()
+    DESTF = sys.argv[2].strip()
+    found_files = scan_for_torrents(SCANF)
+
+    for file in found_files:
+        move_file(SCANF, DESTF, file)
+
+main()

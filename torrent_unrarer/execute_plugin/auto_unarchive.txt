@@ -1,0 +1,6 @@
+Auto Unarchiving is accomplished through use
+of the 'execute' plugin for Deluge, found here:
+http://dev.deluge-torrent.org/wiki/Plugins/Execute 
+
+The 'tor_unarchiver.sh' script in this directory is 
+taken from that link.
