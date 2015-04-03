@@ -19,9 +19,8 @@ def dfh():
     # param into the same string as the df call. Now there is only one
     # string in the command args list... this is the only way it would work.
     proc = subprocess.Popen(
-        ["df -h"], 
-        stdout=subprocess.PIPE, 
-        shell=True
+        ['df', '-h'], 
+        stdout=subprocess.PIPE
     )
     (out, err) = proc.communicate() # Communicate blocks
 
@@ -35,8 +34,10 @@ def dfh():
 @app.route("/dfk")
 def dfk():
     proc = subprocess.Popen(
-        ["df -k"], 
+        "df -k", 
         stdout=subprocess.PIPE, 
+        # Only use shell=True when the command arg to Popen is a
+        # one-liner string instead of an array of args (like in the dfh route)
         shell=True
     )
     (out, err) = proc.communicate()
