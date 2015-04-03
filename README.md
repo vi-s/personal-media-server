@@ -1,5 +1,6 @@
 # personal-media-server
 Automation/Monitoring scripts to make managing a remote personal media serve a breeze.
+
 This type of personal server can easily be achieved for 5 dollars a month on Digital Ocean.
 
 ### Automation
