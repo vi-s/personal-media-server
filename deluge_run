@@ -1,0 +1,15 @@
+# FOR CENTOS / RHEL 7.5
+sudo rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro && sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-1.el7.nux.noarch.rpm
+
+# Create deluge user
+sudo useradd --system --home /var/lib/deluge deluge
+
+# Install deluge components
+sudo yum install deluge-common && sudo yum install deluge-web && sudo yum install deluge-images && sudo yum install deluge-daemon
+
+# Start deluged and deluge-web server
+deluged
+deluge-web --fork
+
+# Open port for deluge-web server
+iptables -A INPUT -p tcp -m tcp --dport 8112 -j ACCEPT
