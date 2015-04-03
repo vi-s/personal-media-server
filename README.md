@@ -1,12 +1,14 @@
 # personal-media-server
-Automation/Monitoring scripts to make managing a remote personal media serve a breeze.
+Automation/Monitoring scripts to make managing a remote personal media serve a breeze. This project was built on a CentOS 7 server, but can be tweaked to work with other distributions.
+
+This type of personal server can easily be achieved for 5 dollars a month on Digital Ocean.
 
 ### Automation
 Processes that are typically carried out manually are automated through executable python scripts.
 Some of these scripts are added to the system's crontab so that they are faithfully executed periodically.
 
 ### Monitoring
-Additionally, certain processes (such as video conversion status) are monitored through a flask web server. This allows you to check your media server's status any time through REST web api, which can be very convenient.
+Additionally, certain processes (such as video conversion status) and infastructure node properties (such as `df -h` output to check available disk space) are monitored through a flask web server. This allows you to check your media server's status any time through REST web api, which can be very convenient.
 
 *Note: The start script for this project was written specifically for CentOS 7, but the python automation scripts can be used on any Unix system. YMMV with Windows.
 
