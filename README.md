@@ -1,7 +1,5 @@
 # personal-media-server
-This project is a collection of automation / monitoring scripts and programs to make managing a remote personal media server a breeze. The shell scripts were written for a CentOS 7 server, but can be tweaked to work with other distributions.
-
-This type of personal server can easily be achieved for 5 dollars a month on Digital Ocean.
+This project is a collection of automation / monitoring scripts and programs to make managing a remote personal media server a breeze. One of the reasons this type of server is so alluring is that it can easily be achieved for 5 dollars a month on Digital Ocean. The shell scripts were written for a CentOS 7 server, but can be tweaked to work with other Linux distributions.
 
 ### Automation
 Processes that are typically carried out manually are automated through executable python scripts.
