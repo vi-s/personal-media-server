@@ -1,6 +1,9 @@
 # To open up the local crontab use this cmd:
 env EDITOR=vim crontab -e
 
+# To tell cron which path to use, include this at the top of the crontab:
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 # In order to get our system to run the python script every 
 # 10 seconds, we are going to have to use a kludge:
 # http://stackoverflow.com/questions/9619362/running-a-cron-every-30-seconds

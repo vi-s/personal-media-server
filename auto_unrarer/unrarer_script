@@ -118,7 +118,7 @@ class ExtractionManager(object):
                     # print 'found rarfp:', rarfp
                     self.cshelf.set(fp, ('visited_dirty', 'PROCESSING'))
                     # Issue shell unrar command on rarfp -> fp
-                    os.system('unrar x {rarfile} {dest_dir}'.format(
+                    os.system('unrar x -y {rarfile} {dest_dir}'.format(
                             rarfile=rarfp,
                             dest_dir=fp
                         )

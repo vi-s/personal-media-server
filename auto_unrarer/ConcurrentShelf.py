@@ -79,7 +79,7 @@ class ShelveLocker(object):
 
     def open(self, mode='READONLY'):
         if mode is 'READWRITE':
-            lockfilemode = 'r' # Append
+            lockfilemode = 'a' # Append
             lockmode = fcntl.LOCK_EX # Exclusive Lock
             shelve_mode = 'c' # Open shelf for reading and writing, creating it if it doesn’t exist
         else:
