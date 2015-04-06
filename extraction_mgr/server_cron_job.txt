@@ -1,6 +1,0 @@
-# For notes on CRON/notation, check the /gtcw/torrent_mover/mover_script file
-
-* * * * * /root/gt-course-watch/torrent_unrarer/unrarer_script /var/www/html/dl
-* * * * * ( sleep 15 ; /root/gt-course-watch/torrent_unrarer/unrarer_script /var/www/html/dl)
-* * * * * ( sleep 30 ; /root/gt-course-watch/torrent_unrarer/unrarer_script /var/www/html/dl)
-* * * * * ( sleep 45 ; /root/gt-course-watch/torrent_unrarer/unrarer_script /var/www/html/dl)
