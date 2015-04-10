@@ -9,6 +9,17 @@ Automated tasks include:
 * Extraction Manager: automatically (via crontab) unrars new content and subsequently deletes the unrared content when its originating rar archive files are deleted, probably via deluge Web UI 
 * WebM Converter: scans a source directory for all available video files and converts them while saving real-time progress statistics for all videos to the disk. This progress stat data is then displayed via Flask web server to allow for highly convenient monitoring.
 
+#### Using the WebM Converter
+```
+cd /gt-course-watch/torrent_webm_converter
+
+# starting in foreground
+./webm_conv QUALITY_ARGV SCANFP_ARGV
+
+# starting in background
+nohup ./webm_conv QUALITY_ARGV SCANFP_ARGV &
+```
+
 ### Monitoring
 Additionally, certain processes (such as video conversion status) and infastructure node properties (such as `df -h` output to check available disk space) are monitored through a flask web server. This allows you to check your media server's status any time through REST web api, which can be very convenient.
 
