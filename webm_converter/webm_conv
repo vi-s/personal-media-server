@@ -35,7 +35,7 @@ re.match('(.*\.(?:mp4|m4v|mkv|avi|flv))$', 'haha.avi')
 
 class WebMConverter(object):
 
-    def __init__(self, shelfn, quality):
+    def __init__(self, shelfn, quality, lim):
         self.midqual_generic_cmd = "ffmpeg -y -i {inputfp} -vcodec libvpx -acodec libvorbis {outputfp}"
         self.highqal_centos7_cmd = "ffmpeg -y -i {inputfp} -codec:v libvpx -quality good -cpu-used 0 -b:v 500k -qmin 10 -qmax 42 -maxrate 500k -bufsize 1000k -threads 4 -vf scale=-1:480 -codec:a libvorbis -b:a 128k {outputfp}"
 
@@ -53,6 +53,8 @@ class WebMConverter(object):
             'hi_centos': self.highqal_centos7_cmd
         }
 
+        self.limit = lim # upper limit on number of videos converted
+        self.vids_processed = 0 # a count of videos converted
         self.quality = quality
         self.shelvefnstr = shelfn
 
@@ -74,6 +76,10 @@ class WebMConverter(object):
                 # Found a video file, commence child process execution / monitoring
                 self.ffmpeg_proc_exec(fp)
 
+                self.vids_processed += 1
+                # if we hit the limit, terminate
+                if self.vids_processed == self.limit:
+                    return
 
     # Execute a single ffmpeg subprocess to convert 1 video file.
     # Subsequently call the monitoring procedure.
@@ -174,8 +180,12 @@ def main():
     shelf_name = "webm_prog.db"
     QUALITY = sys.argv[1].strip() # 'hi_centos' or 'mid_gen'
     SOURCEFP = sys.argv[2].strip() # The sourcefp to scan
+    if len(sys.argv) > 2:
+        LIMIT = sys.argv[3].strip() # either a number or 'None'
+    else:
+        LIMIT = None
 
-    w = WebMConverter(shelf_name, QUALITY)
+    w = WebMConverter(shelf_name, QUALITY, LIMIT)
     w.scan_sourcefp(SOURCEFP)
 
 main()
