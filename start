@@ -1,6 +1,6 @@
 export BTSYNCF=/root/btsyncf #Btsync folder
 export FOLDER_MEMDB_FP=/root/folder_mem.db
-export WEBM_PROG_FP=/root/gt-course-watch/torrent_webm_converter/webm_prog.db
+export WEBM_PROG_FP=/root/personal-media-server/webm_converter/webm_prog.db 
 
 # Start the firewall
 chmod +x firewall
