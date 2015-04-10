@@ -78,7 +78,7 @@ class WebMConverter(object):
 
                 self.vids_processed += 1
                 # if we hit the limit, terminate
-                if self.vids_processed == self.limit:
+                if self.limit and self.vids_processed == self.limit:
                     return
 
     # Execute a single ffmpeg subprocess to convert 1 video file.
