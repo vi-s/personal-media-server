@@ -18,6 +18,7 @@ INPUT ARGV
 SOURCEFP: Take as input a sourcefp to scan for video content
 Video content defined: .mp4, .m4v, .mkv, .avi, .flv
 QUALITY:'mid_gen' or 'hi_centos' (might add more later)
+LIMIT (optional): Can be excluded to have unlimited. Limits max number of vid files to process
 
 This is a script to convert all video files in a certain directory
 to webm using ffmpeg. The progress gets saved to a python shelf on the 
@@ -70,6 +71,10 @@ class WebMConverter(object):
         if sourcefp[-1] == '/':
             sourcefp = sourcefp[:-1]
 
+        print('lim type', type(self.limit))
+        print('vidp type', type(self.vids_processed))
+
+
         for file in os.listdir(sourcefp):
             fp = sourcefp + '/' + file
             if re.match(self.video_re, fp):
@@ -78,7 +83,8 @@ class WebMConverter(object):
 
                 self.vids_processed += 1
                 # if we hit the limit, terminate
-                if self.limit and self.vids_processed == self.limit:
+
+                if self.limit and str(self.vids_processed) == self.limit:
                     return
 
     # Execute a single ffmpeg subprocess to convert 1 video file.
