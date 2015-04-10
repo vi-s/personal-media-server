@@ -18,6 +18,7 @@ INPUT ARGV
 SOURCEFP: Take as input a sourcefp to scan for video content
 Video content defined: .mp4, .m4v, .mkv, .avi, .flv
 QUALITY:'mid_gen' or 'hi_centos' (might add more later)
+LIMIT (optional): Can be excluded to have unlimited. Limits max number of vid files to process
 
 This is a script to convert all video files in a certain directory
 to webm using ffmpeg. The progress gets saved to a python shelf on the 
