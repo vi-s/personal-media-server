@@ -80,6 +80,7 @@ class WebMConverter(object):
                 self.vids_processed += 1
                 # if we hit the limit, terminate
                 if self.limit and str(self.vids_processed) == self.limit:
+		    print('terminated')
                     return
 
     # Execute a single ffmpeg subprocess to convert 1 video file.
@@ -88,8 +89,13 @@ class WebMConverter(object):
         fp = fp.strip()
         # Grab inpput file name
         inf = fp.split('/')[-1] # Name of video file
-        # Escape the spaces
+        print('initial vid file name', inf) 
+        # Escape all the spaces
         inf = inf.replace(' ', '\ ')
+	# Escape the quotes
+	inf = inf.replace("'", "\\'")
+	inf = inf.replace('"', '\\"')
+	print('escaped name', inf)
         outf = '.'.join(inf.split('.')[:-1]) + '.webm' # Constructed output file name
         parent_dir_fp = '/'.join(fp.split('/')[:-1]) # Parent dir of input/ouput files
 
@@ -99,7 +105,7 @@ class WebMConverter(object):
             inputfp=parent_dir_fp + '/' + inf, 
             outputfp=parent_dir_fp + '/' + outf
         )
-
+	print('exec cmd:', cmd)
         # ffmpeg directs progress info to stderr
         child = subprocess.Popen(cmd, shell=True, stderr=subprocess.PIPE)
 
@@ -114,6 +120,7 @@ class WebMConverter(object):
 
         duration_found = False
         program_terminated = False
+	durationstr = ''
 
         while not program_terminated:
             # Lowering the buffer-size param to the read method makes the 
@@ -151,6 +158,9 @@ class WebMConverter(object):
                 # sys.stdout.flush()
 
 
+	self.set_shelve_val(inf, "% progress", '100.00')
+	self.set_shelve_val(inf, "time_complete", durationstr) 
+
     '''
     k is the key, the movie file title 
     vstr is the attribute to set the value dictionary, a nested dict
@@ -181,7 +191,7 @@ def main():
     shelf_name = "webm_prog.db"
     QUALITY = sys.argv[1].strip() # 'hi_centos' or 'mid_gen'
     SOURCEFP = sys.argv[2].strip() # The sourcefp to scan
-    if len(sys.argv) > 2:
+    if len(sys.argv) > 3:
         LIMIT = sys.argv[3].strip() # either a number or 'None'
     else:
         LIMIT = None
