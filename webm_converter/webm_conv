@@ -80,7 +80,7 @@ class WebMConverter(object):
                 self.vids_processed += 1
                 # if we hit the limit, terminate
                 if self.limit and str(self.vids_processed) == self.limit:
-		    print('terminated')
+                    # print('terminated')
                     return
 
     # Execute a single ffmpeg subprocess to convert 1 video file.
@@ -89,7 +89,7 @@ class WebMConverter(object):
         fp = fp.strip()
         # Grab inpput file name
         inf = fp.split('/')[-1] # Name of video file
-        print('initial vid file name', inf) 
+        # print('initial vid file name', inf) 
         # Escape all the spaces
         inf = inf.replace(' ', '\ ')
     	# Escape the quotes, for some reason you need double backslash
