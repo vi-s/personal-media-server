@@ -1,0 +1,7 @@
+* * * * * /home/vikram/personal-media-server/torrent_mover/mover_script /home/vikram/Downloads/ /home/vikram/tor_transfer
+* * * * * ( sleep 10 ; /home/vikram/personal-media-server/torrent_mover/mover_script /home/vikram/Downloads/ /home/vikram/tor_transfer)
+* * * * * ( sleep 20 ; /home/vikram/personal-media-server/torrent_mover/mover_script /home/vikram/Downloads/ /home/vikram/tor_transfer)
+* * * * * ( sleep 30 ; /home/vikram/personal-media-server/torrent_mover/mover_script /home/vikram/Downloads/ /home/vikram/tor_transfer)
+* * * * * ( sleep 40 ; /home/vikram/personal-media-server/torrent_mover/mover_script /home/vikram/Downloads/ /home/vikram/tor_transfer)
+* * * * * ( sleep 50 ; /home/vikram/personal-media-server/torrent_mover/mover_script /home/vikram/Downloads/ /home/vikram/tor_transfer)
+
