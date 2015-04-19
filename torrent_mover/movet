@@ -1,1 +1,4 @@
-mv /home/vikram/Downloads/*.torrent /home/vikram/Downloads/tor_transfer
+mv /home/vikram/Downloads/*.torrent /home/vikram/Downloads/tor_transfer 2>/dev/null
+
+mv /home/vikram/Downloads/torrents/*.torrent /home/vikram/Downloads/tor_transfer 2>/dev/null
+
