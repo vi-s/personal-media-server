@@ -7,6 +7,10 @@
 * * * * * ( sleep 30 ; /root/gt-course-watch/torrent_unrarer/unrarer_script /var/www/html/dl)
 * * * * * ( sleep 45 ; /root/gt-course-watch/torrent_unrarer/unrarer_script /var/www/html/dl)
 
+* * * * * /root/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl
+* * * * * ( sleep 15 ; /root/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl)
+* * * * * ( sleep 30 ; /root/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl)
+* * * * * ( sleep 45 ; /root/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl)
 
 # Local mac extraction manager cron jobs:
 
