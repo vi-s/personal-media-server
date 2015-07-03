@@ -1,5 +1,4 @@
 #!/bin/bash
 mv ~/Downloads/*.torrent ~/Downloads/tor_transfer 2>/dev/null
-
 mv ~/Downloads/torrents/*.torrent ~/Downloads/tor_transfer 2>/dev/null
 

@@ -1,20 +1,14 @@
 # For notes on CRON/notation, check the /gtcw/torrent_mover/mover_script file
 
 # Server extraction manager cron jobs:
-
-* * * * * /root/gt-course-watch/torrent_unrarer/unrarer_script /var/www/html/dl
-* * * * * ( sleep 15 ; /root/gt-course-watch/torrent_unrarer/unrarer_script /var/www/html/dl)
-* * * * * ( sleep 30 ; /root/gt-course-watch/torrent_unrarer/unrarer_script /var/www/html/dl)
-* * * * * ( sleep 45 ; /root/gt-course-watch/torrent_unrarer/unrarer_script /var/www/html/dl)
-
-* * * * * /root/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl
-* * * * * ( sleep 15 ; /root/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl)
-* * * * * ( sleep 30 ; /root/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl)
-* * * * * ( sleep 45 ; /root/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl)
+* * * * * $HOME/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl
+* * * * * ( sleep 15 ; $HOME/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl)
+* * * * * ( sleep 30 ; $HOME/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl)
+* * * * * ( sleep 45 ; $HOME/personal-media-server/extraction_mgr/unrarer_script /var/www/html/dl)
 
 # Local mac extraction manager cron jobs:
 
- * * * * * /Users/vikram/personal-media-server/extraction_mgr/unrarer_script /Users/vikram/Downloads
- * * * * * ( sleep 15 ; /Users/vikram/personal-media-server/extraction_mgr/unrarer_script /Users/vikram/Downloads)
- * * * * * ( sleep 30 ; /Users/vikram/personal-media-server/extraction_mgr/unrarer_script /Users/vikram/Downloads)
- * * * * * ( sleep 45 ; /Users/vikram/personal-media-server/extraction_mgr/unrarer_script /Users/vikram/Downloads)
+* * * * * $HOME/personal-media-server/extraction_mgr/unrarer_script $HOME/Downloads
+* * * * * ( sleep 15 ; $HOME/personal-media-server/extraction_mgr/unrarer_script $HOME/Downloads)
+* * * * * ( sleep 30 ; $HOME/personal-media-server/extraction_mgr/unrarer_script $HOME/Downloads)
+* * * * * ( sleep 45 ; $HOME/personal-media-server/extraction_mgr/unrarer_script $HOME/Downloads)
