@@ -3,6 +3,8 @@
 import sys
 import os
 
+# DEPRECATED. USE THE 'movet' script instead!
+
 # This is a program for a robot that scans a Downloads directory
 # for torrent files, and subsequently moves them to a torrent sync folder
 
