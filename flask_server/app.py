@@ -14,10 +14,8 @@ def hello():
 # Perform the Unix df -h command and send output as response
 @app.route("/dfh")
 def dfh():
-    # Popen has a bug... it doesnt take the second argument in the
-    # list into account, which is why I had to combine the flag
-    # param into the same string as the df call. Now there is only one
-    # string in the command args list... this is the only way it would work.
+    # if you don't include the 'shell=true' param
+    # you have to include all cmd args as seperate array elements
     proc = subprocess.Popen(
         ['df', '-h'], 
         stdout=subprocess.PIPE
