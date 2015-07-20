@@ -1,3 +1,4 @@
+#!/bin/bash
 export BTSYNCF=/root/btsyncf #Btsync folder
 export FOLDER_MEMDB_FP=/root/folder_mem.db
 export WEBM_PROG_FP=/root/personal-media-server/webm_converter/webm_prog.db 
@@ -23,10 +24,27 @@ $BTSYNCF/btsync --webui.listen 0.0.0.0:8888
 rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
 # Install pip through yum / EPEL
 sudo yum -y install python-pip
-# Install flask through pip
-sudo pip install flask
-# Start Flask Dev Server
-# nohup ensures that the process doesnt exit even when the parent process terminates.
-# the & at the end of the command makes the command execute in the background,
-# and therefore allows you to regain access to the command line
+# FAILED ATTEMPT USING FLASK DEV SERVER FOR PROD
+# # Start Flask Dev Server
+# # nohup ensures that the process doesnt exit even when the parent process terminates.
+# # the & at the end of the command makes the command execute in the background,
+# # and therefore allows you to regain access to the command line
 nohup python ./flask_server/app.py &
+
+# ATTEMPT USING NGINX
+# yum groupinstall -y development
+# yum install -y python-devel
+# wget http://www.python.org/ftp/python/2.7.6/Python-2.7.6.tar.xz
+# tar xf Python-2.7.6.tar.xz
+# # Start the configuration (setting the installation directory)
+# # By default files are installed in /usr/local.
+# # You can modify the --prefix to modify it (e.g. for $HOME).
+# ./Python-2.7.6/configure --prefix=/usr/local
+# make && make altinstall
+# pip install virtualenv
+# env/bin/pip2.7 install uwsgi
+# env/bin/pip2.7 install flask
+# # Install nginx
+# sudo yum install -y epel-release
+# sudo yum install -y nginx
+# sudo systemctl start nginx

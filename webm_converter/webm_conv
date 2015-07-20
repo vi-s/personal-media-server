@@ -88,7 +88,8 @@ class WebMConverter(object):
     def ffmpeg_proc_exec(self, fp):
         fp = fp.strip()
         # Grab inpput file name
-        inf = fp.split('/')[-1] # Name of video file
+        # inf = fp.split('/')[-1] # Name of video file
+        inf = fp # Include full path as inf so we escape everything necessary
         # print('initial vid file name', inf) 
         # Escape all the spaces
         inf = inf.replace(' ', '\ ')
@@ -96,13 +97,13 @@ class WebMConverter(object):
     	inf = inf.replace("'", "\\'")
     	inf = inf.replace('"', '\\"')
         outf = '.'.join(inf.split('.')[:-1]) + '.webm' # Constructed output file name
-        parent_dir_fp = '/'.join(fp.split('/')[:-1]) # Parent dir of input/ouput files
+        # parent_dir_fp = '/'.join(fp.split('/')[:-1]) # Parent dir of input/ouput files
 
         # Assemble ffmpeg shell command
         cmd_template = self.translate_quality[self.quality]
         cmd = cmd_template.format(
-            inputfp=parent_dir_fp + '/' + inf, 
-            outputfp=parent_dir_fp + '/' + outf
+            inputfp=inf, 
+            outputfp=outf
         )
         # ffmpeg directs progress info to stderr
         child = subprocess.Popen(cmd, shell=True, stderr=subprocess.PIPE)
