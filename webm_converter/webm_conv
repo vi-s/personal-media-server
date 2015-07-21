@@ -15,9 +15,9 @@ from datetime import datetime
 DEPENDENCIES: 'ffmpeg' unix command line tool
 
 INPUT ARGV
+QUALITY:'mid_gen', 'hi_centos', 'h264'c (might add more later)
 SOURCEFP: Take as input a sourcefp to scan for video content
-Video content defined: .mp4, .m4v, .mkv, .avi, .flv
-QUALITY:'mid_gen', 'hi_centos', 'h264' (might add more later)
+    Video content defined: .mp4, .m4v, .mkv, .avi, .flv
 LIMIT (optional): Can be excluded to have unlimited. Limits max number of vid files to process
 
 This is a script to convert all video files in a certain directory
@@ -98,7 +98,14 @@ class WebMConverter(object):
     	# Escape the quotes, for some reason you need double backslash
     	inf = inf.replace("'", "\\'")
     	inf = inf.replace('"', '\\"')
-        outf = '.'.join(inf.split('.')[:-1]) + '.webm' # Constructed output file name
+
+        # HANDLE ADDITIONAL CODEC FILE ENDINGS HERE
+        if self.quality == 'h264':
+            ending = '.mp4'
+        else:
+            ending = '.webm'
+
+        outf = '.'.join(inf.split('.')[:-1]) + ending # Constructed output file name
         # parent_dir_fp = '/'.join(fp.split('/')[:-1]) # Parent dir of input/ouput files
 
         # Assemble ffmpeg shell command
