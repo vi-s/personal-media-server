@@ -24,6 +24,7 @@ $BTSYNCF/btsync --webui.listen 0.0.0.0:8888
 rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
 # Install pip through yum / EPEL
 sudo yum -y install python-pip
+
 # FAILED ATTEMPT USING FLASK DEV SERVER FOR PROD
 # # Start Flask Dev Server
 # # nohup ensures that the process doesnt exit even when the parent process terminates.
