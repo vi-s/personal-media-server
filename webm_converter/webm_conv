@@ -17,7 +17,8 @@ DEPENDENCIES: 'ffmpeg' unix command line tool
 INPUT ARGV
 QUALITY:'mid_gen', 'hi_centos', 'h264'c (might add more later)
 SOURCEFP: Take as input a sourcefp to scan for video content
-    Video content defined: .mp4, .m4v, .mkv, .avi, .flv
+    Video content defined: .m4v, .mkv, .avi, .flv 
+    we don't include mp4 since that is a target format for h264 encoding
 LIMIT (optional): Can be excluded to have unlimited. Limits max number of vid files to process
 
 This is a script to convert all video files in a certain directory
@@ -48,7 +49,7 @@ class WebMConverter(object):
         # Extract '00:45:56.48' from 'Duration: 00:45:56.48, start: 0.000000, bitrate: 4484 kb/s'
         self.duration_re = "Duration: ((?:[0-9]{2}(?:\:|\.)*)+)"
         # Extract entire video name if one of the formats matches
-        self.video_re = "(.*\.(?:mp4|m4v|mkv|avi|flv))$"
+        self.video_re = "(.*\.(?:m4v|mkv|avi|flv))$"
 
         self.translate_quality = {
             'mid_gen': self.midqual_generic_cmd,
